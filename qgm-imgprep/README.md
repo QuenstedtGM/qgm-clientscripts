@@ -8,7 +8,7 @@ Imgprep Skript
 Hintergrunderzeugung
 ---------------------
 
-* Der Inhalt des verzeichnisses background_files muss nach /home/linuxadmin/.backgrounds/ kopiert werden. (Die xcf-Dateien sind nicht nötig, außer wenn man die Wasserzeichen noch ändern will).
+* Der Inhalt des Verzeichnisses background_files muss nach /home/linuxadmin/.backgrounds/ kopiert werden. (Die xcf-Dateien sind nicht nötig, außer wenn man die Wasserzeichen noch ändern will).
 * Dann stellt man als linuxadmin /home/linuxmuster/.backgrounds/desktop.jpg als Desktop-Hintergrund ein. 
 * Um den Login-Hintergrund unter Ubuntu 16.04 einzustellen, muss man folgendermaßen vorgehen:
   * Als linuxmadmin anmelden und mit `sudo -i` root werden
