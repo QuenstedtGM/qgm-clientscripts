@@ -1,0 +1,63 @@
+#!/bin/bash
+
+apt-get clean
+apt-get autoremove
+
+# clean cache
+rm -rf /home/linuxadmin/.cache/mozilla/
+rm -rf /home/linuxadmin/.cache/chromium/
+rm -rf /home/linuxadmin/.googleearth/Cache
+rm -rf /home/linuxadmin/.googleearth/Temp
+rm -rf /home/linuxadmin/.VirtualBox
+rm -rf /home/linuxadmin/.cache/google-chrome/Default/*
+
+rm -rf /var/cache/oracle-jdk7-installer/*.tar.gz
+rm -rf /var/cache/oracle-jdk8-installer/*.tar.gz
+
+rm -rf /home/linuxadmin/.*~
+rm -rf /home/linuxadmin/.pulse*
+rm -rf /home/linuxadmin/.wine
+rm -rf /home/linuxadmin/.gstreamer*
+rm -rf /home/linuxadmin/.emacs.d
+rm -rf /home/linuxadmin/.gimp-2.6
+rm -rf /home/linuxadmin/.ssh
+rm -rf /home/linuxadmin/.bash_history
+rm -rf /home/linuxadmin/.xsession*
+rm -rf /home/linuxadmin/.Xauthority
+rm -rf /home/linuxadmin/.cache/google-chrome
+rm -rf /home/linuxadmin/.googleearth
+rm -rf /home/linuxadmin/.config/libreoffice/3/user/uno_packages/cache/uno_packages/*.tmp 
+rm -rf /home/linuxadmin/.config/libreoffice/3/user/uno_packages/cache/uno_packages/*.tmp_ 
+
+# clean homes
+#rm -rf /home/students/*
+#rm -rf /home/teachers/*
+#rm -rf /home/schueler/*
+
+# big files im ff profil nullen
+echo "" > /home/linuxadmin/.mozilla/firefox/default/urlclassifier3.sqlite
+echo "" > /home/linuxadmin/.mozilla/firefox/default/places.sqlite
+rm -rf /home/linuxadmin/.mozilla/firefox/default/adblockplus
+
+if [ -d /home/linuxadmin/.backgrounds ]; then
+	cd  /home/linuxadmin/.backgrounds
+        # JPEG Qualiaet
+        mogrify -quality 75% desktop_input.jpg
+        # Zuschneiden auf Full HD Breite
+	convert desktop_input.jpg -resize 1920x1920 desktop_input.jpg
+        # Hoehe anpassen
+	convert  -gravity Center  -crop 1920x1080+0+0 +repage desktop_input.jpg desktop_input.jpg
+        # Gaue version für den login Screen
+	convert -type Grayscale desktop_input.jpg login.jpg
+	# Login Bild kopieren
+	cp login.jpg /usr/share/backgrounds/qgm.jpg
+        if [ -f  login_logo.png ]; then 
+		cp login_logo.png /usr/share/unity-greeter/logo.png
+		composite -gravity SouthWest desktop_logo.png desktop_input.jpg desktop.jpg
+	fi 
+        chown -R linuxadmin.linuxadmin /home/linuxadmin/.backgrounds
+fi
+
+# status
+df -h
+du -sh /home/linuxadmin

@@ -1,0 +1,85 @@
+#!/bin/bash
+######################################################################
+#
+# bildschirm
+# Bildschirme/Beamer steuern und verwalten
+#
+# Copyright 2011 Emanuel Duss
+# 	    2014 Frank Schiebel <frank@linuxmuster.net>
+# Licensed under GNU General Public License
+#
+# 2011-07-26; Emanuel Duss; Erste Version
+# 2012-08-26; Emanuel Duss; $CLONERES automatisch bestimmen
+# 2014-05-22; Frank Schiebel; Displays automatische bestimmen, Anpassungen für linuxmuster.net
+#
+######################################################################
+
+# Konfiguration für manuelle Klonauflösungen lesen
+.  /etc/linuxmuster-client/qgm-cloneres.conf
+
+
+
+######################################################################
+# Variablen
+DISPLAY_1=$(xrandr --query | grep " connected" | awk '{print $1}' | head -n 1)
+DISPLAY_2=$(xrandr --query | grep " connected" | awk '{print $1}' | tail -n 1)
+
+######################################################################
+# Funktionen
+
+PrintUsage(){
+cat << EOI
+Usage:
+ bildschirm < modes | intern | extern | clone | extend >
+
+Optionen:
+  modes     Moegliche Modes ausgeben
+  intern    Nur internen Bildschirm verwenden
+  extern    Nur externer Bildschirm verwenden
+  clone     Gleiche Ausgabe auf beiden Bildschirmen
+  extend    Bild auf externem Bildschirm erweitern
+
+EOI
+}
+
+######################################################################
+# Main
+case $1 in
+  modes)
+    xrandr -q
+    echo 
+    echo "Skriptinfo:"
+    echo "Display 1: $DISPLAY_1"
+    echo "Display 2: $DISPLAY_2"
+    ;;
+  intern)
+    xrandr --output $DISPLAY_1 --auto --output $DISPLAY_2 --off
+    ;;
+  extern)
+    xrandr --output $DISPLAY_1 --off --output $DISPLAY_2 --auto
+    ;;
+  clone)
+    if [ "$DISPLAY_1" != "$DISPLAY_2" ]; then 
+	    echo "Cloning displays: $DISPLAY_1 $DISPLAY_2"
+            CLONERES=${fixresolution[$HOSTNAME]}
+	    # if not predefined, find out
+	    if [ "x$CLONERES" == "x" ]; then 
+	    	CLONERES=`xrandr --query | awk '/^ *[0-9]*x[0-9]*/{ print $1 }' | sort -n | uniq -d | tail -1`
+	    fi
+	    xrandr --output $DISPLAY_1 --mode $CLONERES --output $DISPLAY_2 --same-as $DISPLAY_1 --mode $CLONERES
+    else
+	    echo "Only one connected display found. Exit."
+    fi
+    ;;
+  extend)
+    xrandr --output $DISPLAY_1 --auto --output $DISPLAY_2 --auto --right-of $DISPLAY_1
+    ;;
+  *)
+    PrintUsage
+    ;;
+esac
+
+# EOF
+
+
+
