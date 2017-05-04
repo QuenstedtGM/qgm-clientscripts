@@ -3,6 +3,7 @@ Imgprep Skript
 
 * Zur Ausführung vor der Image Erstellung
 * Muss angepasst werden!
+* Man kann sich das mit der Hintergrunderzeugung natürlich rauskopieren und wunschgemäß anpassen. The Code is the Documentation ;)
 
 Hintergrunderzeugung
 ---------------------
